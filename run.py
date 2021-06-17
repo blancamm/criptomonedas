@@ -1,0 +1,1 @@
+from criptomonedas import app

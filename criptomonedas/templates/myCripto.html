@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inversion Criptomonedas</title>
+    <link rel="stylesheet" href="/static/css/milligram.css">
+    <script src="/static/js/myCripto.js"></script> 
+</head>
+<body>
+
+    <h1>My crypto</h1>
+    <main>
+        <section class="container" id="movimientos">
+            <div class="lista_movimientos">
+                <table class="tabla_movimientos">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>From</th>
+                            <th>Cantidad</th>
+                            <th>To</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+        <div class="Nuevo movimiento container">
+            <form>
+                <div class="row"> 
+                    <input type="hidden" id="idMovimiento"> 
+                    <div class="column column-50">
+                        <label for="from">From:</label>
+                        <select name="moneda_from" id="moneda_from">
+                            <option value="EUR">Euro(EUR)</option>
+                            <option value="BTC">Bitcoin(BTC)</option>
+                            <option value="ETH">Ethereum(ETH)</option>
+                            <option value="XRP">Ripple(XRP)</option>
+                            <option value="LTC">Litecoin(LTC)</option>
+                            <option value="BCH">Bitcoin Cash(BCH)</option>
+                            <option value="BNB">Binance Coin(BNB)</option>
+                            <option value="USDT">Tether(USDT)</option>
+                            <option value="EOS">Eos(EOS)</option>
+                            <option value="BSV">Bitcoin SV(BSV)</option>
+                            <option value="XLM">Stellar(XLM)</option>
+                            <option value="ADA">Cardano(ADA)</option>
+                            <option value="TRX">Tron(TRX)</option>
+    
+                        </select>
+                    </div>
+                    <div class="column column-50">
+                        <label for="to">To:</label>
+                        <select name="moneda_to" id="moneda_to">
+                            <option value="EUR">Euro(EUR)</option>
+                            <option value="BTC">Bitcoin(BTC)</option>
+                            <option value="ETH">Ethereum(ETH)</option>
+                            <option value="XRP">Ripple(XRP)</option>
+                            <option value="LTC">Litecoin(LTC)</option>
+                            <option value="BCH">Bitcoin Cash(BCH)</option>
+                            <option value="BNB">Binance Coin(BNB)</option>
+                            <option value="USDT">Tether(USDT)</option>
+                            <option value="EOS">Eos(EOS)</option>
+                            <option value="BSV">Bitcoin SV(BSV)</option>
+                            <option value="XLM">Stellar(XLM)</option>
+                            <option value="ADA">Cardano(ADA)</option>
+                            <option value="TRX">Tron(TRX)</option>
+    
+                        </select>
+                
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column column-45"> 
+                        <label for="cantidad_from">Cantidad:</label>
+                        <input type="number" name="cantidad_from" id="cantidad_from" step="any">
+                    </div>
+                    <div class="column">
+                        <label for="boton calcular">Calculadora:</label>
+                        <button id="calculadora">Calcular</button>
+                    </div>
+                    <div class="column column-30">
+                        <label for="cantidad_to">Cantidad:</label>
+                        <input type="number" name="cantidad_to" id="cantidad_to" step="any" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <label for="conversion_unitaria">Precio Unitario (Conversión) :</label>
+                        <input type="number" name="conversion_unitaria" id="conversion_unitaria" step="any" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <button id="boton_registro">Guardar</button>
+            
+                    <button id="boton_cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="Status">
+            <button>Actualizar</button>
+            <button>Despliegue</button>
+
+        </div>
+    </main>
+
+    <footer>
+        
+        &copy 2021- Todos los derechos reservados
+    </footer>
+
+</body>
+</html>

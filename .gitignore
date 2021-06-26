@@ -1,5 +1,5 @@
 venv/
 .env
-**/__Pycache__/
+**/__pycache__/
 config.py
 data/

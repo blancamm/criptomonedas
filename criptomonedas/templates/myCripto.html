@@ -100,12 +100,44 @@
                 </div>
             </form>
         </div>
-        
-        <div class="Status">
-            <button>Actualizar</button>
-            <button>Despliegue</button>
 
+        <div class="Status container">
+            <div class="Status">
+                <table class="status_y_despliegue">
+                    <button>Actualizar</button>
+                    <div class="row">
+                        <div class="column">
+                            <p>Invertido:</p>
+                        </div>
+                        <div class="column">
+                            <input type="number" name="inversion_euros" id="inversion_euros" step="any" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <p>Valor actual:</p>
+                        </div>
+                        <div class="column">
+                            <input type="number" name="valor_actual" id="valor_actual" step="any" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <p>Resultado:</p>
+                        </div>
+                        <div class="column">
+                            <input type="number" name="ganancia_perdida" id="ganancia_perdida" step="any" disabled>
+                        </div>
+                    </div>
+                      
+                    <button>Despliegue</button>
+                </table>
+    
+
+            </div>
         </div>
+        
+
     </main>
 
     <footer>

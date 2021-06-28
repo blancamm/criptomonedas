@@ -4,11 +4,14 @@ criptomonedas = {
     }
 
 xhr = new XMLHttpRequest
+xhr2 = new XMLHttpRequest
 
 let movimientos
 let moneda_to
 let moneda_from
 let cantidad_convertir
+
+
 
 function presentacionMovimientos(){
     if(this.readyState === 4 && this.status === 200) {
@@ -38,6 +41,8 @@ function presentacionMovimientos(){
             alert("Se ha producido un error al intentar conseguir las inversiones")
             return
         }
+
+    
     }
 }
 
@@ -48,12 +53,23 @@ function llamadaMovimientos() {
     
 }
 
-function presentacionStatus(){}
+function presentacionStatus(){
+    if(this.readyState === 4 && this.status === 200){
+        status_total = JSON.parse(this.responseText)
+
+        document.querySelector('#inversion_euros').value = status_total.data.invertido
+        document.querySelector('#valor_actual').value = status_total.data.valor_actual
+
+        resultado = parseFloat(status_total.data.valor_actual) - parseFloat(status_total.data.invertido)
+
+        document.querySelector('#ganancia_perdida').value = resultado
+    }
+}
 
 function llamadaStatus(){
-    xhr.open('GET', `http://localhost:5000/api/v1/status`, true)
-    xhr.onload=presentacionStatus
-    xhr.send()
+    xhr2.open('GET', `http://localhost:5000/api/v1/status`, true)
+    xhr2.onload=presentacionStatus
+    xhr2.send()
 }
 
 function presentacionCalculadora(){
@@ -89,11 +105,17 @@ function InversionGrabada(){
         const nueva_inversion= JSON.parse(this.responseText)
     
         llamadaMovimientos()
+        llamadaStatus()
 
-        alert("La inversion ha sido creada.\nCriptomonedas involucradas: "+ nueva_inversion.monedas)
+        alert("La inversion ha sido creada. (id:" + nueva_inversion.id + ')' +"\nCriptomonedas involucradas: "+ nueva_inversion.monedas)
     }
 
-    
+    if (this.status === 400){
+        const fallo = JSON.parse(this.responseText)
+        alert(fallo.mensaje)
+        return
+    }
+   
 }
 
 function llamadaNuevaInversion(evento){ //se podria coge rlos datos del formulario en una funcion
@@ -110,6 +132,8 @@ function llamadaNuevaInversion(evento){ //se podria coge rlos datos del formular
     inversion.fecha= fecha_y_hora.getFullYear()+ '/' + (fecha_y_hora.getMonth()+1) + '/' + fecha_y_hora.getDate()
     inversion.hora= fecha_y_hora.getHours() + ':' + fecha_y_hora.getMinutes() +':' + fecha_y_hora.getSeconds()
 
+
+
     xhr.open("POST", `http://localhost:5000/api/v1/movimiento`, true)
     xhr.onload = InversionGrabada
 
@@ -119,11 +143,9 @@ function llamadaNuevaInversion(evento){ //se podria coge rlos datos del formular
 
 }
 
-
-
-window.onload =function(){ 
+window.onload = function(){ 
     llamadaMovimientos()
-    //llamadaStatus()
+    llamadaStatus()
 
     calculadora=document.querySelector("#calculadora")
         .addEventListener("click", llamadaCalculadora)

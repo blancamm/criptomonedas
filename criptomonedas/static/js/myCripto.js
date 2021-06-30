@@ -11,7 +11,21 @@ let moneda_to
 let moneda_from
 let cantidad_convertir
 
+function DatosFormulario() {
+    const datosFormulario = {}
+    datosFormulario.cantidad_from=document.querySelector("#cantidad_from").value
+    datosFormulario.moneda_from=document.querySelector("#moneda_from").value
+    datosFormulario.moneda_to=document.querySelector("#moneda_to").value
+    datosFormulario.cantidad_to=document.querySelector('#cantidad_to').value
 
+    return datosFormulario
+}
+
+function BorraFormulario() {
+    document.getElementById("nueva_inversion_monedas").reset()
+    document.getElementById("nueva_inversion_restos_datos").reset()
+    
+}
 
 function presentacionMovimientos(){
     if(this.readyState === 4 && this.status === 200) {
@@ -49,20 +63,25 @@ function presentacionMovimientos(){
 function llamadaMovimientos() {
     xhr.open("GET", `http://localhost:5000/api/v1/movimientos`, true)
     xhr.onload = presentacionMovimientos
-    xhr.send()
-    
+    xhr.send() 
 }
 
 function presentacionStatus(){
-    if(this.readyState === 4 && this.status === 200){
-        status_total = JSON.parse(this.responseText)
-
-        document.querySelector('#inversion_euros').value = status_total.data.invertido
-        document.querySelector('#valor_actual').value = status_total.data.valor_actual
-
-        resultado = parseFloat(status_total.data.valor_actual) - parseFloat(status_total.data.invertido)
-
-        document.querySelector('#ganancia_perdida').value = resultado
+    if(this.readyState === 4) {
+        if(this.status === 200){
+            const status_total = JSON.parse(this.responseText)
+    
+            document.querySelector('#inversion_euros').value = status_total.data.invertido.toFixed(2)
+            document.querySelector('#valor_actual').value = status_total.data.valor_actual.toFixed(2)
+    
+            resultado = parseFloat(status_total.data.valor_actual) - parseFloat(status_total.data.invertido)
+    
+            document.querySelector('#ganancia_perdida').value = resultado.toFixed(2) 
+        }
+        if (this.status === 400 || this.status === 404){
+            const fallo = JSON.parse(this.responseText)
+            alert (fallo.mensaje)
+        }
     }
 }
 
@@ -73,18 +92,24 @@ function llamadaStatus(){
 }
 
 function presentacionCalculadora(){
-    if (this.readyState=== 4 && this.status===200){
-        const conversion=JSON.parse(this.responseText)
-
-        if (conversion.status.error_code===0){
-            let dato=conversion.data.quote[moneda_to].price
-            document.querySelector("#cantidad_to").value=dato
-
-            let precio_unitario=dato/cantidad_convertir
-            document.querySelector("#conversion_unitaria").value=precio_unitario
+    if (this.readyState=== 4){
+        if (this.status===200){
+            const conversion=JSON.parse(this.responseText)
+            if (conversion.status.error_code===0){
+                let dato=conversion.data.quote[moneda_to].price
+                document.querySelector("#cantidad_to").value=dato.toFixed(8)
+    
+                let precio_unitario=dato/cantidad_convertir
+                document.querySelector("#conversion_unitaria").value=precio_unitario.toFixed(8)
+                }
+            else {
+                alert("No se ha podido realizar el calculo de la conversión")
+                }
         }
-        else {
-            alert("No se ha podido realizar el calculo de la conversión")
+        if (this.status === 400) {
+            const fallo = JSON.parse(this.responseText)
+            alert(fallo.mensaje)
+            document.getElementById("nueva_inversion_restos_datos").reset()
         }
     }
 }
@@ -101,46 +126,41 @@ function llamadaCalculadora(evento){
 }
 
 function InversionGrabada(){
-    if (this.readyState=== 4 && this.status===201){
-        const nueva_inversion= JSON.parse(this.responseText)
-    
-        llamadaMovimientos()
-        llamadaStatus()
-
-        alert("La inversion ha sido creada. (id:" + nueva_inversion.id + ')' +"\nCriptomonedas involucradas: "+ nueva_inversion.monedas)
+    if (this.readyState=== 4){
+        if (this.status===201){
+            const nueva_inversion= JSON.parse(this.responseText)
+            llamadaMovimientos()
+            llamadaStatus()
+            alert("La inversion ha sido creada. (id:" + nueva_inversion.id + ')' +"\nCriptomonedas involucradas: "+ nueva_inversion.monedas)
+            BorraFormulario()
+        }
+        if (this.status === 400){
+            const fallo = JSON.parse(this.responseText)
+            alert(fallo.mensaje)
+            if (fallo.mensaje === "Debe rellenar todos los datos del formulario. Para calcular la conversion pulsar boton 'Calcular'"){
+                return
+            }else{
+                document.getElementById("nueva_inversion_restos_datos").reset()
+                return
+            }
+        }
     }
-
-    if (this.status === 400){
-        const fallo = JSON.parse(this.responseText)
-        alert(fallo.mensaje)
-        return
-    }
-   
 }
 
-function llamadaNuevaInversion(evento){ //se podria coge rlos datos del formulario en una funcion
+function llamadaNuevaInversion(evento){
     evento.preventDefault()
-
-    const inversion={}
-
-    inversion.cantidad_from=document.querySelector("#cantidad_from").value
-    inversion.moneda_from=document.querySelector("#moneda_from").value
-    inversion.moneda_to=document.querySelector("#moneda_to").value
-    inversion.cantidad_to=document.querySelector('#cantidad_to').value
-
-    let fecha_y_hora=new Date()
-    inversion.fecha= fecha_y_hora.getFullYear()+ '/' + (fecha_y_hora.getMonth()+1) + '/' + fecha_y_hora.getDate()
-    inversion.hora= fecha_y_hora.getHours() + ':' + fecha_y_hora.getMinutes() +':' + fecha_y_hora.getSeconds()
-
-
+    inversion = DatosFormulario()
 
     xhr.open("POST", `http://localhost:5000/api/v1/movimiento`, true)
     xhr.onload = InversionGrabada
 
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
     xhr.send(JSON.stringify(inversion))
+}
 
-
+function CancelarInversion(evento) {
+    evento.preventDefault()
+    BorraFormulario()
 }
 
 window.onload = function(){ 
@@ -152,4 +172,7 @@ window.onload = function(){
 
     Guardar_Inversion=document.querySelector('#boton_registro')
         .addEventListener("click", llamadaNuevaInversion)
+
+    cancelar_inversion = document.querySelector("#boton_cancelar")
+        .addEventListener("click", CancelarInversion)
 }

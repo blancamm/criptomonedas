@@ -73,10 +73,7 @@ function presentacionStatus(){
     
             document.querySelector('#inversion_euros').value = status_total.data.invertido.toFixed(2)
             document.querySelector('#valor_actual').value = status_total.data.valor_actual.toFixed(2)
-    
-            resultado = parseFloat(status_total.data.valor_actual) - parseFloat(status_total.data.invertido)
-    
-            document.querySelector('#ganancia_perdida').value = resultado.toFixed(2) 
+            document.querySelector('#ganancia_perdida').value = status_total.data.resultado.toFixed(2) 
         }
         if (this.status === 400 || this.status === 404){
             const fallo = JSON.parse(this.responseText)

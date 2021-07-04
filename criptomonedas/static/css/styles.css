@@ -1,0 +1,456 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&family=Tourney:wght@300&display=swap');
+
+*, *::before, *::after  {
+    box-sizing: border-box;
+
+}
+
+*{
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+
+h1 {
+    color: white;
+    font-family: 'Tourney', cursive;
+    font-size: 60px;
+    margin: 25px;
+    text-shadow: 1px 1px rgb(99, 99, 99);
+}
+
+h2 {color: white;
+    font-family: 'Inconsolata', monospace;
+    font-size: 40px;
+    margin: 5px;
+    text-shadow: 1px 1px rgb(55, 51, 51);
+    font-size: 40px;
+}
+
+
+body {
+    background-color: #C4D3F6;
+    color: white;
+    font-size: 17px;
+}
+
+.titulo > h1 {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-flow: row wrap;
+    border: 0;
+
+}  
+
+.wrapper > * {
+    margin: 15px;
+    padding: 30px;
+    flex: 1 100%;   
+}
+.main-wrapped{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    align-content: stretch;
+    vertical-align: middle;
+    width: 100%;
+    border: solid 3px white;
+    box-shadow: 1px 1px #d6d6d6 ;
+    border-radius: 10px;
+}
+
+@media all and (max-width: 900px){
+    .main-wrapped {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+.main-wrapped > * {
+    margin: 15px;
+    padding: 30px;
+}
+
+.lista_movimientos {
+    width: 65%;
+}
+
+.lista_status {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+section {
+    background-color: rgba(255, 2555, 255, 0.5);
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+details {
+    margin: 10px;
+
+}
+
+details > * {
+    width: 100%;
+}
+
+summary {
+    display: block;
+    border-radius: 10px;
+    background-color: rgba(255, 2555, 255, 0.65);
+    font-weight: bold;
+    color: rgb(78, 78, 78);
+    padding: 8px;
+    width: 100%;
+    margin-top: 3px;
+    display: block;
+    cursor: pointer;
+    font-size: 22px;
+    transition: .3s;
+    border-bottom: 4px solid rgb(162, 162, 162);
+    user-select: none;
+  }
+
+summary:hover {
+    border: solid 4px #414770;
+    color: #414770;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+details[open] > summary {
+    color: #414770;
+    border-bottom: 4px solid #414770;
+}
+
+
+@media (min-width: 200px) {
+    details[open] > div > table {
+        opacity: 0;
+        animation-name: showContent;
+        animation-duration: 0.6s;
+        animation-delay: 0.2s;
+        animation-fill-mode: forwards;
+        margin: 0;
+        padding-bottom: 3px;
+      }
+
+      details[open] > div {
+        animation-delay: 0.2s;
+        animation-name: slideDown;
+        animation-duration: 0.6s;
+        animation-fill-mode: forwards;
+      }
+    }
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+
+    }
+    
+    to {
+        opacity: 1;
+
+    }
+
+    }
+@keyframes showContent {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+    }
+
+table {     
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    box-shadow: 1px 1px #d6d6d6
+  }
+
+
+
+td {
+    font-weight: bold;
+    padding: 1em;
+    background: white;
+    color: rgb(78, 78, 78);
+    border-bottom: 0.5px solid #d6d6d6; 
+  }
+
+th {font-weight: bold;
+    padding: 1em;
+    background-color: #6C7AE0;
+    color: #FFFFFF;
+    border-bottom: 2px solid white; 
+    font-size: 18px
+}
+
+.tabla_movimientos tr:hover td {
+  background-color: #ececff;
+  cursor: pointer;
+}
+.tabla_status tr:hover td {
+  background-color: #ececff;
+  cursor: pointer;
+}
+
+#Detalle_criptos tr:hover td {
+  background-color: #ececff;
+  cursor: pointer;
+}
+
+
+
+
+fieldset {   
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border: solid 4px rgba(108, 122, 224,0.95);
+    color: #8E99A4;
+    margin: 8px;
+}
+
+.columna1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: flex-end; 
+    flex-shrink: 5;
+    flex-grow: 5;
+}
+
+.columna2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: flex-start; 
+    flex-shrink: 5;
+    flex-grow: 5;
+}
+
+.columna-rara {
+    align-self: center;
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+.fila2{
+    padding-left: 5px;
+}
+
+.fila {
+
+    padding-top: 5px;
+    padding-bottom: 3px;
+    width: 100%;
+}
+
+.fila > * {
+    width: 99%;
+}
+
+label {
+    display: block;
+    color: rgb(78, 78, 78);
+}
+
+
+legend > h2 {
+    color: white;
+    font-family: 'Inconsolata', monospace;
+    font-size: 30px;
+    margin: 8px;
+    text-shadow: 1px 1px rgb(55, 51, 51);
+    font-size: 40px;
+    text-align: center;
+}
+
+select {
+    color: rgb(78, 78, 78);
+    border: 0;
+    border-bottom:2px solid #8E99A4;
+    border-radius: 10px;
+    height: 40px;
+    font-size:15px;
+    font-weight: bold;
+}
+
+select:focus{
+    outline: none;
+    border-bottom: 4px solid #414770;
+}
+
+input[type="number"]  {
+    border-radius: 10px;
+    border: 0;
+    border-bottom: 2px solid #8E99A4;
+    height: 37px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-bottom: 4px solid #414770;
+
+}
+
+#calculadora {
+    background-color: #6C7AE0;
+    color: #FFFFFF;
+    border-radius: 6px;
+    border: 0;
+    padding: 5px;
+    font-size: 16px; 
+    cursor: pointer; 
+    text-align: center;
+    text-transform: uppercase;
+    width: 75%;
+    box-shadow: 1px 1px #8E99A4;
+}
+
+#calculadora:hover {
+    background-color: #414770;
+    color: #FFFFFF;
+    }
+
+#boton_registro {
+    background-color: #6C7AE0;
+    color: white;
+    border-radius: 10px;
+    float: right;
+    border: 0;
+    padding: 9.5px;
+    margin: 5px;
+    font-size: 16px; 
+    cursor: pointer; 
+    text-align: center;
+    text-transform: uppercase;
+    box-shadow: 1px 1px #8E99A4; 
+}
+#boton_registro:hover {
+    background-color: #414770;
+    color: whitesmoke;
+    }
+
+#boton_cancelar {
+    border-radius: 10px;
+    float: right;
+    text-transform: uppercase;
+    border: 0;
+    color: #495057;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.75);
+    padding: 5.5px;
+    margin: 5px;
+    text-align: center;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border: 4px solid #6C7AE0;
+    box-shadow: 1px 1px #8E99A4;
+}
+    
+#boton_cancelar:hover {
+        background-color: #6C7AE0;
+        color: white;
+    }
+      
+.scroll-tabla{
+    overflow-y: auto;
+    height: 500px; }
+
+
+
+.nuevo_inversion{
+    border: solid 3px white;
+    border-radius: 10px;
+    align-self: flex-end;
+    box-shadow: 1px 1px #d6d6d6;
+}
+
+
+.btn_actualizar {
+    align-self: center;
+    background-color: #6C7AE0;
+    color: #FFFFFF;
+    border-radius: 6px;
+    border: 0;
+    padding: 8px;
+    margin: 8px;
+    font-size: 20px; 
+    cursor: pointer; 
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    box-shadow: 1px 1px #8E99A4;
+
+    }
+.btn_actualizar:hover {
+    background-color: #414770;
+    color: #FFFFFF;
+
+    }
+
+footer {
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0.75px 0.75px #495057;
+    font-size: 20px;
+    background-color:rgba(108, 122, 224,0.30);
+
+}
+
+.resultado_positivo {
+    border: solid 6px #3ec300;
+    
+}
+.resultado_positivo >* {
+    color: #3ec300;
+}
+
+.resultado_negativo {
+    border: solid 6px #ff1d15;
+}
+.resultado_negativo>* {
+    color: #ff1d15;
+}
+
+
+
+
+
+
+
+
+

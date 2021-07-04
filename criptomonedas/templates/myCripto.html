@@ -4,148 +4,166 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inversion Criptomonedas</title>
-    <link rel="stylesheet" href="/static/css/milligram.css">
+    <script src="https://kit.fontawesome.com/2ca4cc90cc.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tourney:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
     <script src="/static/js/myCripto.js"></script> 
+
+    <title>Criptocurrency</title>
 </head>
+
 <body>
-
-    <h1>My crypto</h1>
-    <main>
-        <section class="container" id="movimientos">
-            <div class="lista_movimientos">
-                <table class="tabla_movimientos">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>From</th>
-                            <th>Cantidad</th>
-                            <th>To</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </section>
-        <div class="Nuevo movimiento container">
-            <form id="nueva_inversion_monedas">
-                <div class="row"> 
-                    <input type="hidden" id="idMovimiento"> 
-                    <div class="column column-50">
-                        <label for="from">From:</label>
-                        <select name="moneda_from" id="moneda_from">
-                            <option value="EUR">Euro(EUR)</option>
-                            <option value="BTC">Bitcoin(BTC)</option>
-                            <option value="ETH">Ethereum(ETH)</option>
-                            <option value="XRP">Ripple(XRP)</option>
-                            <option value="LTC">Litecoin(LTC)</option>
-                            <option value="BCH">Bitcoin Cash(BCH)</option>
-                            <option value="BNB">Binance Coin(BNB)</option>
-                            <option value="USDT">Tether(USDT)</option>
-                            <option value="EOS">Eos(EOS)</option>
-                            <option value="BSV">Bitcoin SV(BSV)</option>
-                            <option value="XLM">Stellar(XLM)</option>
-                            <option value="ADA">Cardano(ADA)</option>
-                            <option value="TRX">Tron(TRX)</option>
-    
-                        </select>
-                    </div>
-                    <div class="column column-50">
-                        <label for="to">To:</label>
-                        <select name="moneda_to" id="moneda_to">
-                            <option value="EUR">Euro(EUR)</option>
-                            <option value="BTC">Bitcoin(BTC)</option>
-                            <option value="ETH">Ethereum(ETH)</option>
-                            <option value="XRP">Ripple(XRP)</option>
-                            <option value="LTC">Litecoin(LTC)</option>
-                            <option value="BCH">Bitcoin Cash(BCH)</option>
-                            <option value="BNB">Binance Coin(BNB)</option>
-                            <option value="USDT">Tether(USDT)</option>
-                            <option value="EOS">Eos(EOS)</option>
-                            <option value="BSV">Bitcoin SV(BSV)</option>
-                            <option value="XLM">Stellar(XLM)</option>
-                            <option value="ADA">Cardano(ADA)</option>
-                            <option value="TRX">Tron(TRX)</option>
-    
-                        </select>
-                
-                    </div>
-                </div>
-            </form>
-            <form id="nueva_inversion_restos_datos">
-                <div class="row">
-                    <div class="column column-45"> 
-                        <label for="cantidad_from">Cantidad:</label>
-                        <input type="number" name="cantidad_from" id="cantidad_from" step="any">
-                    </div>
-                    <div class="column">
-                        <label for="boton calcular">Calculadora:</label>
-                        <button id="calculadora">Calcular</button>
-                    </div>
-                    <div class="column column-30">
-                        <label for="cantidad_to">Cantidad:</label>
-                        <input type="number" name="cantidad_to" id="cantidad_to" step="any" disabled>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="column">
-                        <label for="conversion_unitaria">Precio Unitario (Conversión) :</label>
-                        <input type="number" name="conversion_unitaria" id="conversion_unitaria" step="any" disabled>
-                    </div>
-                </div>
-                <div class="row">
-                    <button id="boton_registro">Guardar</button>
-            
-                    <button id="boton_cancelar">Cancelar</button>
-                </div>
-            </form>
+    <header class="header">
+        <div class="titulo">
+            <h1>My criptocurrency investment</h1>
         </div>
+    </header>
+    <main class="main">
+        <div class="wrapper">
+            <div class="main-wrapped">
+                <div class="lista_movimientos">
+                    <h2>My Investments</h2>
+                    <div class="scroll-tabla">
+                        <table class="tabla_movimientos">
+                            <thead>
+                                <tr class="row_header">
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>From</th>
+                                    <th>Cantidad</th>
+                                    <th>To</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="lista_status">
+                    <h2>Investment Status</h2>
+                    <table class="tabla_status">
+                        <thead>
+                            <tr>
+                                <th colspan="3">Resumen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Invertido:</td>
+                            </tr>
+                            <tr>
+                                <td>Valor actual:</td>
+                            </tr>
+                            <tr>
+                                <td>Resultado</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-        <div class="Status container">
-            <div class="Status">
-                <table class="status_y_despliegue">
-                    <button>Actualizar</button>
-                    <div class="row">
-                        <div class="column">
-                            <p>Invertido:</p>
-                        </div>
-                        <div class="column">
-                            <input type="number" name="inversion_euros" id="inversion_euros" step="any" disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="column">
-                            <p>Valor actual:</p>
-                        </div>
-                        <div class="column">
-                            <input type="number" name="valor_actual" id="valor_actual" step="any" disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="column">
-                            <p>Resultado:</p>
-                        </div>
-                        <div class="column">
-                            <input type="number" name="ganancia_perdida" id="ganancia_perdida" step="any" disabled>
-                        </div>
-                    </div>
-                      
-                    <button>Despliegue</button>
-                </table>
+                    <button class="btn_actualizar">Actualizar <i class='fas fa-sync-alt'></i></button>
+
+                    <section>
+                        <details>
+                            <summary>Despliegue</summary>
+                            <div>
+                                <table id="Detalle_criptos">
+                                    <thead>
+                                        <tr>
+                                            <th>Moneda</th>
+                                            <th>En crypto</th>
+                                            <th>En euros</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
     
+                        </details>
+                    </section>
+                </div>
 
             </div>
-        </div>
-        
+            <div class="nuevo_inversion">
+                <form id="nueva_inversion">
+                    <fieldset>
+                        <legend><h2>New investment</h2></legend>
+                        <div class="columna1">
+                            <div class="fila">
+                                <label for="from">From:</label>
+                                <select name="moneda_from" id="moneda_from">
+                                    <option value="EUR">Euro(EUR)</option>
+                                    <option value="BTC">Bitcoin(BTC)</option>
+                                    <option value="ETH">Ethereum(ETH)</option>
+                                    <option value="XRP">Ripple(XRP)</option>
+                                    <option value="LTC">Litecoin(LTC)</option>
+                                    <option value="BCH">Bitcoin Cash(BCH)</option>
+                                    <option value="BNB">Binance Coin(BNB)</option>
+                                    <option value="USDT">Tether(USDT)</option>
+                                    <option value="EOS">Eos(EOS)</option>
+                                    <option value="BSV">Bitcoin SV(BSV)</option>
+                                    <option value="XLM">Stellar(XLM)</option>
+                                    <option value="ADA">Cardano(ADA)</option>
+                                    <option value="TRX">Tron(TRX)</option>
+                                </select>
+                            </div>
+                            <div class="fila">
+                                <label for="cantidad_from">Cantidad:</label>
+                                <input type="number" name="cantidad_from" id="cantidad_from" step="any">
+                            </div>
+                        </div>
+                        <div class="columna-rara">
+                            <div>
+                                <br>
+                            </div>
+                            <div class="fila2">
+                                <button id="calculadora"><i class="fas fa-calculator"></i> Calcular</button>
+                            </div>
 
+                        </div>
+                        <div class="columna2">
+                            <div class="fila">
+                                <label for="to">To:</label>
+                                <select name="moneda_to" id="moneda_to">
+                                    <option value="EUR">Euro(EUR)</option>
+                                    <option value="BTC">Bitcoin(BTC)</option>
+                                    <option value="ETH">Ethereum(ETH)</option>
+                                    <option value="XRP">Ripple(XRP)</option>
+                                    <option value="LTC">Litecoin(LTC)</option>
+                                    <option value="BCH">Bitcoin Cash(BCH)</option>
+                                    <option value="BNB">Binance Coin(BNB)</option>
+                                    <option value="USDT">Tether(USDT)</option>
+                                    <option value="EOS">Eos(EOS)</option>
+                                    <option value="BSV">Bitcoin SV(BSV)</option>
+                                    <option value="XLM">Stellar(XLM)</option>
+                                    <option value="ADA">Cardano(ADA)</option>
+                                    <option value="TRX">Tron(TRX)</option>
+                                </select>
+                            </div>
+                            <div class="fila">
+                                <label for="cantidad_to">Cantidad:</label>
+                                <input type="number" name="cantidad_to" id="cantidad_to" step="any" disabled> 
+                            </div>
+                            <div class="fila">
+                                <label for="conversion_unitaria">Precio Unitario:</label>
+                                <input type="number" name="conversion_unitaria" id="conversion_unitaria" step="any" disabled>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                    <button class="reset" id="boton_cancelar"><i class="far fa-times-circle"></i> Cancelar</button>
+
+                    <button class="btn_aceptar" id="boton_registro"><i class="far fa-check-circle"></i> Guardar</button>
+                </form>
+            </div>
+        </div>
     </main>
 
-    <footer>
-        
-        &copy 2021- Todos los derechos reservados
+    <footer class="footer">
+        &copy 2021. Blanca Martín Muñoz - Todos los derechos reservados
     </footer>
-
 </body>
+
+
 </html>

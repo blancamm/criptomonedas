@@ -44,6 +44,8 @@ def saldo_criptomonedas():
         return {"status": "fail", "mensaje":str(error)}
 
 def validacion_coinMarket(cantidad):
+    if cantidad == "":
+        return "Debe ingresar una cantidad"
     if cantidad != "":
         if float(cantidad) < 0:
             error = "No se puede hacer una inversion de cantidades negativas"
@@ -68,8 +70,8 @@ def validacion(nueva_inversion, saldo):
             
     moneda=nueva_inversion["moneda_from"]
     if moneda !='EUR':
-        if nueva_inversion["cantidad_from"] != "" and (nueva_inversion["cantidad_from"] > str(saldo["saldo_criptos"][moneda])):
-            error = "Saldo de criptomoneda insuficiente. Mirar despliegue"
+        if float(nueva_inversion["cantidad_from"] )> saldo["saldo_criptos"][moneda]:
+            error = "Saldo de criptomoneda insuficiente. Mirar despliegue."
             return error
 
     return "success"
@@ -84,10 +86,10 @@ def listaMovimientos():
         query="SELECT * FROM Movimientos_Criptomonedas ORDER BY fecha"
         movimientos = dbManager.accesoTodosMovimientos(query)
         
-        return jsonify({"status": "success", "data": movimientos})
+        return jsonify({"status": "success", "data": movimientos}), HTTPStatus.OK
 
     except sqlite3.Error as error:
-        return jsonify({"status": "fail", "mensaje":str(error)})
+        return jsonify({"status": "fail", "mensaje":str(error)}), HTTPStatus.BAD_REQUEST
 
 @app.route('/api/v1/movimiento/<int:id>', methods=['GET'])
 @app.route('/api/v1/movimiento', methods=['POST'])
@@ -114,19 +116,19 @@ def detalleMovimiento(id=None):
             respuesta = validacion(datos_nueva_inversion, saldo_actual)
 
             if respuesta == "success":
-                query="""
-                INSERT INTO Movimientos_Criptomonedas 
-                (fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to)
-                VALUES (:fecha, :hora, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to) 
-                """
-                dbManager.nuevoMovimiento(query, datos_nueva_inversion)
 
-                nueva_query="SELECT * FROM Movimientos_Criptomonedas WHERE ID = (SELECT MAX(ID) FROM Movimientos_Criptomonedas);"
-                ultimo_movimiento=dbManager.accesoMovimiento(nueva_query) 
-                ultimo_id=ultimo_movimiento[0]["id"]
+                    query="""
+                    INSERT INTO Movimientos_Criptomonedas 
+                    (fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to)
+                    VALUES (:fecha, :hora, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to) 
+                    """
+                    dbManager.nuevoMovimiento(query, datos_nueva_inversion)
 
-                return jsonify({"status": "success", "id":ultimo_id, "monedas":[datos_nueva_inversion["moneda_from"], datos_nueva_inversion["moneda_to"]]}), HTTPStatus.CREATED
+                    nueva_query="SELECT * FROM Movimientos_Criptomonedas WHERE ID = (SELECT MAX(ID) FROM Movimientos_Criptomonedas);"
+                    ultimo_movimiento=dbManager.accesoMovimiento(nueva_query) 
+                    ultimo_id=ultimo_movimiento[0]["id"]
 
+                    return jsonify({"status": "success", "id":ultimo_id, "monedas":[datos_nueva_inversion["moneda_from"], datos_nueva_inversion["moneda_to"]]}), HTTPStatus.CREATED
             else:
                 raise NameError(respuesta)
 
@@ -142,7 +144,7 @@ def conversion_api_coinmarket(moneda_from, moneda_to, cantidad_convertir=1.0):
         if respuesta == "success":
             url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={cantidad_convertir}&symbol={moneda_from}&convert={moneda_to}&CMC_PRO_API_KEY=ac4720b5-e4ec-455f-a0f0-f47c44b7b79c"
             conversion = requests.get(url)
-            return Response(conversion)
+            return Response(conversion), HTTPStatus.OK
         else:
             return jsonify({"status":"fail", "mensaje":respuesta}), HTTPStatus.BAD_REQUEST
     except:
@@ -163,6 +165,15 @@ def status():
             saldo = diccionario_detalle_criptos[moneda]
 
             if saldo != 0:
+                validacion = validacion_coinMarket(saldo)
+                if validacion == "Los valores de la inversion deben estar etre 10e-8 y 10e8":
+                    saldo = round(saldo, 8)
+                elif validacion =="success":
+                    saldo = saldo
+                else:
+                    return jsonify({"status": "fail", "mensaje":validacion}), HTTPStatus.BAD_REQUEST
+            
+            if saldo !=0:
                 url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={saldo}&symbol={moneda}&convert=EUR&CMC_PRO_API_KEY=ac4720b5-e4ec-455f-a0f0-f47c44b7b79c"
                 conversion = requests.get(url)
                 if conversion.status_code == 200:
@@ -181,7 +192,7 @@ def status():
 
         diccionario_status={"invertido":diccionario_saldo["total_euros_invertidos"], "valor_actual":valor_actual, "resultado" : resultado}
 
-        return jsonify({"status": "success", "data": diccionario_status, "detalle": diccionario_detalle_criptos, "detalle criptos euros": diccionario_detalle_criptos_euros, "euros atrapados":-1*diccionario_saldo["saldo_euros_atrapados"]}), HTTPStatus.OK
+        return jsonify({"status": "success", "data": diccionario_status, "detalle": diccionario_detalle_criptos, "detalle_criptos_euros": diccionario_detalle_criptos_euros, "euros atrapados":-1*diccionario_saldo["saldo_euros_atrapados"]}), HTTPStatus.OK
 
     elif saldo_actual["status"] == "fail":
         return jsonify({"status": "fail", "mensaje":saldo_actual["mensaje"]}), HTTPStatus.BAD_REQUEST

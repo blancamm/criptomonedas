@@ -11,6 +11,8 @@ let moneda_to
 let moneda_from
 let cantidad_convertir
 
+
+
 function DatosFormulario() {
     const datosFormulario = {}
     datosFormulario.cantidad_from=document.querySelector("#cantidad_from").value
@@ -21,16 +23,22 @@ function DatosFormulario() {
     return datosFormulario
 }
 
-function BorraFormulario() {
-    document.getElementById("nueva_inversion_monedas").reset()
-    document.getElementById("nueva_inversion_restos_datos").reset()
+function BorraFormulario(dato) {
+    if(dato=="2"){
+        document.getElementById("cantidad_from").value = ""
+        document.getElementById("cantidad_to").value = ""
+        document.getElementById("conversion_unitaria").value = ""
+    }
+
+    if (dato=="1") {
+        document.getElementById("nueva_inversion").reset()
+    }
     
 }
 
 function presentacionMovimientos(){
     if(this.readyState === 4 && this.status === 200) {
         const inversiones=JSON.parse(this.responseText)
-
         if(inversiones.status == 'success'){
 
             const tablaBody=document.querySelector(".tabla_movimientos tbody")
@@ -39,6 +47,7 @@ function presentacionMovimientos(){
             movimientos=inversiones.data
             for(let i=0; i<movimientos.length; i++){
                 const fila= document.createElement('tr')
+                fila.setAttribute("class", "fila_cursor")
                 const dentroFila=`
                     <td>${movimientos[i].fecha}</td>
                     <td>${movimientos[i].hora}</td>
@@ -50,13 +59,15 @@ function presentacionMovimientos(){
                 fila.innerHTML=dentroFila
                 tablaBody.appendChild(fila)
             }
-    
         } else {
             alert("Se ha producido un error al intentar conseguir las inversiones")
             return
         }
-
-    
+    }
+    if(this.status === 400) {
+        const fallo=JSON.parse(this.responseText)
+        alert(fallo.mensaje)
+        return
     }
 }
 
@@ -70,11 +81,70 @@ function presentacionStatus(){
     if(this.readyState === 4) {
         if(this.status === 200){
             const status_total = JSON.parse(this.responseText)
-    
-            document.querySelector('#inversion_euros').value = status_total.data.invertido.toFixed(2)
-            document.querySelector('#valor_actual').value = status_total.data.valor_actual.toFixed(2)
-            document.querySelector('#ganancia_perdida').value = status_total.data.resultado.toFixed(2) 
+
+            const tablaBodyStatus=document.querySelector(".tabla_status tbody")
+            tablaBodyStatus.innerHTML=""
+
+
+            STATUS = status_total.data
+            const fila1 = document.createElement("tr")
+            dentroFila1 = `
+            <td>Invertido: </td>
+            <td>${STATUS.invertido.toFixed(2)}</td>
+            <td>€</td>
+            `
+            fila1.innerHTML = dentroFila1
+            tablaBodyStatus.append(fila1)
+
+            const fila2 = document.createElement("tr")
+            dentroFila2 = `
+            <td>Valor actual: </td>
+            <td>${STATUS.valor_actual.toFixed(2)}</td>
+            <td>€</td>
+            `
+            fila2.innerHTML = dentroFila2
+            tablaBodyStatus.append(fila2)
+
+            const fila3 = document.createElement("tr")
+            fila3.setAttribute("id", "FILA3")
+            dentroFila3 = `
+            <td id>Resultado: </td>
+            <td id="resultado">${STATUS.resultado.toFixed(2)}</td>
+            <td>€</td>
+            `
+            fila3.innerHTML = dentroFila3
+            tablaBodyStatus.append(fila3)
+
+            let resultado = document.querySelector("#resultado")
+            if (resultado.innerHTML > 0){
+                fila3.setAttribute("class", "resultado_positivo")
+            } else {
+                fila3.setAttribute("class", "resultado_negativo")
+            }
+
+            const tablaDetalles = document.querySelector("#Detalle_criptos tbody")
+            tablaDetalles.innerHTML=""
+
+            let detalle_criptos = status_total.detalle
+            let detalle_criptos_euros = status_total.detalle_criptos_euros
+            for (const property in detalle_criptos_euros) {
+                const FILA = document.createElement("tr")
+                dentroFILA= `
+                <td>${property}</td>
+                <td>${detalle_criptos[property].toFixed(8)}</td>
+                <td>${detalle_criptos_euros[property].toFixed(8)}</td>
+         
+                `
+                FILA.innerHTML = dentroFILA
+                tablaDetalles.append(FILA)
+            }
+
+            actualizar_status = document.querySelector(".btn_actualizar")
+            actualizar_status.innerHTML="Actualizar <i class='fas fa-sync-alt'></i>"
+
         }
+
+
         if (this.status === 400 || this.status === 404){
             const fallo = JSON.parse(this.responseText)
             alert (fallo.mensaje)
@@ -86,6 +156,10 @@ function llamadaStatus(){
     xhr2.open('GET', `http://localhost:5000/api/v1/status`, true)
     xhr2.onload=presentacionStatus
     xhr2.send()
+    actualizar_status = document.querySelector(".btn_actualizar")
+    actualizar_status.innerHTML = "<i class='fas fa-sync-alt fa-spin fa-3x'></i>"
+
+
 }
 
 function presentacionCalculadora(){
@@ -106,7 +180,7 @@ function presentacionCalculadora(){
         if (this.status === 400) {
             const fallo = JSON.parse(this.responseText)
             alert(fallo.mensaje)
-            document.getElementById("nueva_inversion_restos_datos").reset()
+            BorraFormulario(2)
         }
     }
 }
@@ -114,6 +188,9 @@ function presentacionCalculadora(){
 function llamadaCalculadora(evento){
     evento.preventDefault()
     cantidad_convertir=document.querySelector("#cantidad_from").value
+    if (cantidad_convertir===""){
+        alert ("Debe ingresar una cantidad")
+    }
     moneda_from=document.querySelector("#moneda_from").value
     moneda_to=document.querySelector("#moneda_to").value
 
@@ -129,7 +206,7 @@ function InversionGrabada(){
             llamadaMovimientos()
             llamadaStatus()
             alert("La inversion ha sido creada. (id:" + nueva_inversion.id + ')' +"\nCriptomonedas involucradas: "+ nueva_inversion.monedas)
-            BorraFormulario()
+            BorraFormulario(1)
         }
         if (this.status === 400){
             const fallo = JSON.parse(this.responseText)
@@ -137,7 +214,7 @@ function InversionGrabada(){
             if (fallo.mensaje === "Debe rellenar todos los datos del formulario. Para calcular la conversion pulsar boton 'Calcular'"){
                 return
             }else{
-                document.getElementById("nueva_inversion_restos_datos").reset()
+                BorraFormulario(2)
                 return
             }
         }
@@ -157,7 +234,7 @@ function llamadaNuevaInversion(evento){
 
 function CancelarInversion(evento) {
     evento.preventDefault()
-    BorraFormulario()
+    BorraFormulario(1)
 }
 
 window.onload = function(){ 
@@ -172,4 +249,7 @@ window.onload = function(){
 
     cancelar_inversion = document.querySelector("#boton_cancelar")
         .addEventListener("click", CancelarInversion)
+
+    actualizar_status = document.querySelector(".btn_actualizar")
+        .addEventListener("click", llamadaStatus)
 }

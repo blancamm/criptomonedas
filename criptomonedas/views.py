@@ -163,38 +163,49 @@ def status():
         diccionario_detalle_criptos =saldo_actual["saldo_criptos"]
         diccionario_detalle_criptos_euros = {}
 
-        for moneda in diccionario_detalle_criptos.keys():
-            saldo = diccionario_detalle_criptos[moneda]
+        valor = 0
+        for key in diccionario_saldo:
+            valor += diccionario_saldo [key]
+        for key in diccionario_detalle_criptos:
+            valor += diccionario_detalle_criptos[key]
+        
+        if valor != 0:
 
-            if saldo != 0:
-                validacion = validacion_coinMarket(saldo)
-                if validacion == "Los valores de la inversion deben estar etre 10e-8 y 10e8":
-                    saldo = round(saldo, 8)
-                elif validacion =="success":
-                    saldo = saldo
-                else:
-                    return jsonify({"status": "fail", "mensaje":validacion}), HTTPStatus.BAD_REQUEST
-            
-            if saldo !=0:
-                url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={saldo}&symbol={moneda}&convert=EUR&CMC_PRO_API_KEY=ac4720b5-e4ec-455f-a0f0-f47c44b7b79c"
-                conversion = requests.get(url)
-                if conversion.status_code == 200:
-                    respuesta = conversion.json()
-                    if not respuesta.get("data"):
-                        return jsonify({"status": "fail", "mensaje":"No se puede calcular el status, revise los movimientos o vuelva a intentarlo más tarde"}), HTTPStatus.NOT_FOUND                 
-                    saldo_convertido=respuesta["data"]["quote"]["EUR"]["price"]
-                    diccionario_detalle_criptos_euros[moneda] = saldo_convertido
-                    suma_cripto_euros += saldo_convertido
-                    diccionario_saldo["valor_criptos"] = suma_cripto_euros
-                else:
-                    return jsonify({"status": "fail", "mensaje":"Se ha producido un error al realizar la conversion"}), HTTPStatus.BAD_REQUEST
+            for moneda in diccionario_detalle_criptos.keys():
+                saldo = diccionario_detalle_criptos[moneda]
 
-        valor_actual = diccionario_saldo["total_euros_invertidos"] + diccionario_saldo["saldo_euros_atrapados"] + diccionario_saldo["valor_criptos"]
-        resultado =  valor_actual - diccionario_saldo["total_euros_invertidos"]
+                if saldo != 0:
+                    validacion = validacion_coinMarket(saldo)
+                    if validacion == "Los valores de la inversion deben estar etre 10e-8 y 10e8":
+                        saldo = round(saldo, 8)
+                    elif validacion =="success":
+                        saldo = saldo
+                    else:
+                        return jsonify({"status": "fail", "mensaje":validacion}), HTTPStatus.BAD_REQUEST
+                
+                if saldo !=0:
+                    url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={saldo}&symbol={moneda}&convert=EUR&CMC_PRO_API_KEY=ac4720b5-e4ec-455f-a0f0-f47c44b7b79c"
+                    conversion = requests.get(url)
+                    if conversion.status_code == 200:
+                        respuesta = conversion.json()
+                        if not respuesta.get("data"):
+                            return jsonify({"status": "fail", "mensaje":"No se puede calcular el status, revise los movimientos o vuelva a intentarlo más tarde"}), HTTPStatus.NOT_FOUND                 
+                        saldo_convertido=respuesta["data"]["quote"]["EUR"]["price"]
+                        diccionario_detalle_criptos_euros[moneda] = saldo_convertido
+                        suma_cripto_euros += saldo_convertido
+                        diccionario_saldo["valor_criptos"] = suma_cripto_euros
+                    else:
+                        return jsonify({"status": "fail", "mensaje":"Se ha producido un error al realizar la conversion"}), HTTPStatus.BAD_REQUEST
 
-        diccionario_status={"invertido":diccionario_saldo["total_euros_invertidos"], "valor_actual":valor_actual, "resultado" : resultado}
+            valor_actual = diccionario_saldo["total_euros_invertidos"] + diccionario_saldo["saldo_euros_atrapados"] + diccionario_saldo["valor_criptos"]
+            resultado =  valor_actual - diccionario_saldo["total_euros_invertidos"]
 
-        return jsonify({"status": "success", "data": diccionario_status, "detalle": diccionario_detalle_criptos, "detalle_criptos_euros": diccionario_detalle_criptos_euros, "euros atrapados":-1*diccionario_saldo["saldo_euros_atrapados"]}), HTTPStatus.OK
+            diccionario_status={"invertido":diccionario_saldo["total_euros_invertidos"], "valor_actual":valor_actual, "resultado" : resultado}
+
+            return jsonify({"status": "success", "data": diccionario_status, "detalle": diccionario_detalle_criptos, "detalle_criptos_euros": diccionario_detalle_criptos_euros, "euros atrapados":-1*diccionario_saldo["saldo_euros_atrapados"]}), HTTPStatus.OK
+        
+        else:
+            return jsonify({"status": "fail", "mensaje":"No hay status que calcular"}), HTTPStatus.BAD_REQUEST
 
     elif saldo_actual["status"] == "fail":
         return jsonify({"status": "fail", "mensaje":saldo_actual["mensaje"]}), HTTPStatus.BAD_REQUEST

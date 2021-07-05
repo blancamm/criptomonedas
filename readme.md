@@ -46,10 +46,10 @@ ___
     * Duplicar fichero config_template.py
     * Renombrar este por config.py
     * Informar SECRET_KEY con la clave de su usario en coinmarket. Para obtenerla: [aqui](https://coinmarketcap.com/api/)
-    * Informar de la ruta a la base de datos en DATABASE. Esta debe estar dentro de la carpeta del proyecto fuera de la carpeta criptomonedas.
+    * Crear ruta a base de datos e informar de esta en DATABASE. Esta debe estar dentro de la carpeta del proyecto fuera de la carpeta criptomonedas.
 
 6. Crear base de datos ejecutando el fichero `migrations/initial.sql`
-    * Se puede hacer con un lciente gráfico o con sqlite3
+    * Se puede hacer con un Cliente gráfico o con sqlite3
     * Se ejecuta lo siguiente:
     ```python
     sqlite3 <ruta al fichero que se informar en config.py en DATABASE >

@@ -147,6 +147,8 @@ function presentacionStatus(){
         if (this.status === 400 || this.status === 404){
             const fallo = JSON.parse(this.responseText)
             alert (fallo.mensaje)
+            actualizar_status = document.querySelector(".btn_actualizar")
+            actualizar_status.innerHTML="Actualizar <i class='fas fa-sync-alt'></i>"
         }
     }
 }

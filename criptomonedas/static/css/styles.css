@@ -140,7 +140,7 @@ details[open] > summary {
 
 
 @media (min-width: 200px) {
-    details[open] > div > table {
+    details[open] > div > .scroll-detalle {
         opacity: 0;
         animation-name: showContent;
         animation-duration: 0.6s;
@@ -153,7 +153,7 @@ details[open] > summary {
       details[open] > div {
         animation-delay: 0.2s;
         animation-name: slideDown;
-        animation-duration: 0.6s;
+        animation-duration: 0.4s;
         animation-fill-mode: forwards;
       }
     }
@@ -389,6 +389,11 @@ input[type="number"]:focus {
 .scroll-tabla{
     overflow-y: auto;
     height: 500px; }
+
+.scroll-detalle {
+    overflow-y: auto;
+    height: 500px;
+}
 
 
 

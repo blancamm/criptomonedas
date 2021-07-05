@@ -116,19 +116,21 @@ def detalleMovimiento(id=None):
             respuesta = validacion(datos_nueva_inversion, saldo_actual)
 
             if respuesta == "success":
+                datos_nueva_inversion["cantidad_from"] = round(float(datos_nueva_inversion["cantidad_from"]), 8)
+                datos_nueva_inversion["cantidad_to"] = round(float(datos_nueva_inversion["cantidad_to"]), 8)                
 
-                    query="""
-                    INSERT INTO Movimientos_Criptomonedas 
-                    (fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to)
-                    VALUES (:fecha, :hora, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to) 
-                    """
-                    dbManager.nuevoMovimiento(query, datos_nueva_inversion)
+                query="""
+                INSERT INTO Movimientos_Criptomonedas 
+                (fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to)
+                VALUES (:fecha, :hora, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to) 
+                """
+                dbManager.nuevoMovimiento(query, datos_nueva_inversion)
 
-                    nueva_query="SELECT * FROM Movimientos_Criptomonedas WHERE ID = (SELECT MAX(ID) FROM Movimientos_Criptomonedas);"
-                    ultimo_movimiento=dbManager.accesoMovimiento(nueva_query) 
-                    ultimo_id=ultimo_movimiento[0]["id"]
+                nueva_query="SELECT * FROM Movimientos_Criptomonedas WHERE ID = (SELECT MAX(ID) FROM Movimientos_Criptomonedas);"
+                ultimo_movimiento=dbManager.accesoMovimiento(nueva_query) 
+                ultimo_id=ultimo_movimiento[0]["id"]
 
-                    return jsonify({"status": "success", "id":ultimo_id, "monedas":[datos_nueva_inversion["moneda_from"], datos_nueva_inversion["moneda_to"]]}), HTTPStatus.CREATED
+                return jsonify({"status": "success", "id":ultimo_id, "monedas":[datos_nueva_inversion["moneda_from"], datos_nueva_inversion["moneda_to"]]}), HTTPStatus.CREATED
             else:
                 raise NameError(respuesta)
 

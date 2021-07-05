@@ -12,7 +12,6 @@ let moneda_from
 let cantidad_convertir
 
 
-
 function DatosFormulario() {
     const datosFormulario = {}
     datosFormulario.cantidad_from=document.querySelector("#cantidad_from").value
@@ -158,8 +157,6 @@ function llamadaStatus(){
     xhr2.send()
     actualizar_status = document.querySelector(".btn_actualizar")
     actualizar_status.innerHTML = "<i class='fas fa-sync-alt fa-spin fa-3x'></i>"
-
-
 }
 
 function presentacionCalculadora(){
@@ -168,10 +165,10 @@ function presentacionCalculadora(){
             const conversion=JSON.parse(this.responseText)
             if (conversion.status.error_code===0){
                 let dato=conversion.data.quote[moneda_to].price
-                document.querySelector("#cantidad_to").value=dato.toFixed(8)
+                document.querySelector("#cantidad_to").value=dato
     
                 let precio_unitario=dato/cantidad_convertir
-                document.querySelector("#conversion_unitaria").value=precio_unitario.toFixed(8)
+                document.querySelector("#conversion_unitaria").value=precio_unitario
                 }
             else {
                 alert("No se ha podido realizar el calculo de la conversión")
@@ -224,6 +221,22 @@ function InversionGrabada(){
 function llamadaNuevaInversion(evento){
     evento.preventDefault()
     inversion = DatosFormulario()
+    for (const property in inversion) {
+        let valor = inversion[property] 
+        if (valor == ""){
+            alert("Debe rellenar todos los datos")
+            return
+        }
+    }
+    if(cantidad_convertir !== inversion.cantidad_from || moneda_to !== inversion.moneda_to || moneda_from !==inversion.moneda_from){
+        alert("No debe cambiar los datos, es hacer trampas")
+        BorraFormulario(1)
+        cantidad_convertir =""
+        return
+    }
+
+
+    
 
     xhr.open("POST", `http://localhost:5000/api/v1/movimiento`, true)
     xhr.onload = InversionGrabada

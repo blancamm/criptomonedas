@@ -18,7 +18,7 @@ def saldo_criptomonedas():
         query="SELECT * FROM Movimientos_Criptomonedas ORDER BY fecha"
         movimientos = dbManager.accesoTodosMovimientos(query)
         if movimientos == []:
-            return {"status": "fail1", "mensaje":"No hay status que calcular"}
+            return {"status": "fail1", "mensaje":"No hay status que calcular, y por tanto, no tienes criptomonedas"}
         diccionario_saldo = {}
         diccionario_detalle_criptos= {}
         for moneda in criptomonedas:
@@ -76,6 +76,8 @@ def validacion(nueva_inversion, saldo):
             if float(nueva_inversion["cantidad_from"] )> saldo["saldo_criptos"][moneda]:
                 error = "Saldo de criptomoneda insuficiente. Mirar despliegue."
                 return error
+    elif "mensaje" in claves and moneda != 'EUR':
+        return saldo["mensaje"]
 
     return "success"
 

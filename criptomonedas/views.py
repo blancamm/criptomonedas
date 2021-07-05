@@ -70,10 +70,14 @@ def validacion(nueva_inversion, saldo):
             return "Debe rellenar todos los datos del formulario. Para calcular la conversion pulsar boton 'Calcular'"
             
     moneda=nueva_inversion["moneda_from"]
-    if moneda !='EUR':
-        if float(nueva_inversion["cantidad_from"] )> saldo["saldo_criptos"][moneda]:
-            error = "Saldo de criptomoneda insuficiente. Mirar despliegue."
-            return error
+    claves = saldo.keys()
+    if "saldo_criptos" in claves:
+        if moneda !='EUR':
+            if float(nueva_inversion["cantidad_from"] )> saldo["saldo_criptos"][moneda]:
+                error = "Saldo de criptomoneda insuficiente. Mirar despliegue."
+                return error
+    else:
+        return "No tienes todavia criptomonedas"
 
     return "success"
 

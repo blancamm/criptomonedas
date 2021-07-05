@@ -54,7 +54,7 @@ ___
     ```python
     sqlite3 <ruta al fichero que se informar en config.py en DATABASE >
     .read <ruta relativa a migrations/initial.sql>
-    .tablas
+    .tables
     .q
     ```
 ---

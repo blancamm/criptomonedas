@@ -76,8 +76,6 @@ def validacion(nueva_inversion, saldo):
             if float(nueva_inversion["cantidad_from"] )> saldo["saldo_criptos"][moneda]:
                 error = "Saldo de criptomoneda insuficiente. Mirar despliegue."
                 return error
-    else:
-        return "No tienes todavia criptomonedas"
 
     return "success"
 
